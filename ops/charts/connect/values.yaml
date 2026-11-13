@@ -946,6 +946,41 @@ postgresql:
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
+    # The image keeps its configuration, PID file and logs in directories only its
+    # root group (0) can write. With group 1001 they become emptyDirs, and an init
+    # container copies the image's configuration into the first
+    initContainers:
+      - name: copy-conf
+        image: '{{ include "postgresql.image" . }}'
+        command: ["sh", "-c", "cp -r /opt/bitnami/postgresql/conf/. /conf/"]
+        securityContext:
+          runAsUser: 1001
+          runAsGroup: 1001
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 16Mi
+        volumeMounts:
+          - name: conf
+            mountPath: /conf
+    extraVolumes:
+      - name: conf
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: conf
+        mountPath: /opt/bitnami/postgresql/conf
+      - name: tmp
+        mountPath: /opt/bitnami/postgresql/tmp
+      - name: logs
+        mountPath: /opt/bitnami/postgresql/logs
     # Requests and a memory limit for the bundled PostgreSQL
     resources:
       limits:
