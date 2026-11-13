@@ -184,9 +184,13 @@ edgeport:
   # Resource limits and requests
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 512Mi
     # Resource requests
-    requests: {}
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 # Dispatcher Service defaults
 dispatcher:
@@ -291,7 +295,9 @@ dispatcher:
   # A quarter core per replica is a start; size them to your traffic
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 256Mi
     # Resource requests
     requests:
       cpu: 250m
@@ -390,7 +396,9 @@ location:
   # replica is a start; size them to your traffic
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 256Mi
     # Resource requests
     requests:
       cpu: 100m
@@ -465,9 +473,13 @@ apiserver:
       pullPolicy: IfNotPresent
     resources:
       # Resource limits
-      limits: {}
+      limits:
+        # No CPU limit, so the pod is not throttled below what the node can give it
+        memory: 512Mi
       # Resource requests
-      requests: {}
+      requests:
+        cpu: 100m
+        memory: 128Mi
   # Pod annotations
   podAnnotations: {}
   # Service annotations
@@ -525,7 +537,9 @@ apiserver:
   # replica is a start; size them to your traffic
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 512Mi
     # Resource requests
     requests:
       cpu: 250m
@@ -640,7 +654,9 @@ connect:
   # locally (GOMAXPROCS=2). Half a core per replica is a start; size them to your traffic
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 512Mi
     # Resource requests
     requests:
       cpu: 500m
@@ -726,9 +742,13 @@ registry:
   # Resource limits and requests
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 256Mi
     # Resource requests
-    requests: {}
+    requests:
+      cpu: 100m
+      memory: 64Mi
   # Autoscaling configuration
   autoscaling:
     # Minimum number of replicas
@@ -792,9 +812,13 @@ requester:
   # Resource limits and requests
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 256Mi
     # Resource requests
-    requests: {}
+    requests:
+      cpu: 100m
+      memory: 64Mi
   # Pods of the Deployment, when autoscaling.enabled is false
   replicas: 1
   # Autoscaling configuration: a HorizontalPodAutoscaler instead of replicas, on the CPU and
@@ -876,9 +900,13 @@ rtprelay:
   # Resource limits and requests
   resources:
     # Resource limits
-    limits: {}
+    limits:
+      # No CPU limit, so the pod is not throttled below what the node can give it
+      memory: 256Mi
     # Resource requests
-    requests: {}
+    requests:
+      cpu: 100m
+      memory: 64Mi
   # Pods of the Deployment, when autoscaling.enabled is false
   replicas: 1
   # Autoscaling configuration: a HorizontalPodAutoscaler instead of replicas, on the CPU and
@@ -911,6 +939,14 @@ postgresql:
   metrics:
     image:
       repository: bitnamilegacy/postgres-exporter
+  primary:
+    # Requests and a memory limit for the bundled PostgreSQL
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
   auth:
     # The database the chart's own URL names. The Data API needs it to exist when it
     # starts, before the migrations run.
@@ -945,5 +981,13 @@ redis:
       # bitnami-shell has no bitnamilegacy copy; os-shell is its renamed successor
       repository: bitnamilegacy/os-shell
       tag: 11-debian-11-r99
+  master:
+    # Requests and a memory limit for the bundled Redis
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
   auth:
     enabled: false
