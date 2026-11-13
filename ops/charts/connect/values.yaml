@@ -940,6 +940,12 @@ postgresql:
     image:
       repository: bitnamilegacy/postgres-exporter
   primary:
+    # The image's user 1001 with group 1001 instead of the image's root group (0)
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
     # Requests and a memory limit for the bundled PostgreSQL
     resources:
       limits:
@@ -982,6 +988,12 @@ redis:
       repository: bitnamilegacy/os-shell
       tag: 11-debian-11-r99
   master:
+    # The image's user 1001 with group 1001 instead of the image's root group (0)
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
     # Requests and a memory limit for the bundled Redis
     resources:
       limits:
